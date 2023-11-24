@@ -6,8 +6,11 @@ using UnityEngine.UI;
 public class InventoryUIPanal : MonoBehaviour
 {
 
-    public Button normalBrickButton, rotatedBrickButton, halfBrickButton, cementButton;
-
+    public Button normalBrickButton, rotatedBrickButton, halfBrickButton, cementButton, deletedBrick;
+    [Header("Textures")]
+    public Texture2D cursorHammerTexture;
+    public CursorMode cursorMode = CursorMode.Auto;
+    public Vector2 hotSpot = Vector2.zero;
 
     // Start is called before the first frame update
     void Start()
@@ -17,6 +20,7 @@ public class InventoryUIPanal : MonoBehaviour
         rotatedBrickButton.onClick.AddListener(SelectRotatedBrick);
         halfBrickButton.onClick.AddListener(SelectHalfBrick);
         cementButton.onClick.AddListener(SelectCement);
+        deletedBrick.onClick.AddListener(DeleteBrick);
     }
 
     // Update is called once per frame
@@ -47,5 +51,11 @@ public class InventoryUIPanal : MonoBehaviour
     {
         PlayerController.instance.obj_Array.arrayPos = 3;
         PlayerController.instance.isBuilding = true;
+    }
+
+    public void DeleteBrick()
+    {
+        PlayerController.instance.deleteBrickActive = !PlayerController.instance.deleteBrickActive;
+        Cursor.SetCursor(cursorHammerTexture, hotSpot, cursorMode);
     }
 }

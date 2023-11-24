@@ -134,7 +134,7 @@ public class PlayerController : MonoBehaviour
         {
 
             deleteBrickActive = !deleteBrickActive; // enable or disable the brick delete tool
-
+            Cursor.SetCursor(cursorHammerTexture, hotSpot, cursorMode);
         }
 
         if (Input.GetKeyDown(KeyCode.P))
