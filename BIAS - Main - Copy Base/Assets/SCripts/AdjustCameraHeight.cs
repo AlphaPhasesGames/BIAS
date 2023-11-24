@@ -14,7 +14,7 @@ public class AdjustCameraHeight : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Equals)) // if = key is pressed
+        if(Input.GetAxis("Mouse ScrollWheel") > 0f) // if = key is pressed
         {
             if (!cameraAtMaxZoom) // if camera not at max zoon
             {
@@ -28,7 +28,7 @@ public class AdjustCameraHeight : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Minus)) // if - key is pressed
+        if (Input.GetAxis("Mouse ScrollWheel") < 0f) // if - key is pressed
         {
             if (!cameraAtMinZoom) // if camera not at min zoon
             {
