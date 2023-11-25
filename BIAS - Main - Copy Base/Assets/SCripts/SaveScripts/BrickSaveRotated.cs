@@ -20,7 +20,7 @@ public class BrickSaveRotated : MonoBehaviour
             gameObject.SetActive(false); //  set this gameobject to inactive and hide it 
             Destroy(this.gameObject); // destroy this gameobject
             Destroy(transform.parent.gameObject); // destroy parent object of this object
-            Builder.instance.Add1ToBrickAmount();
+          //  Builder.instance.Add1ToBrickAmount();
         }
 
     }

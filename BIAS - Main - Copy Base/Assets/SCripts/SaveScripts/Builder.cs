@@ -65,6 +65,6 @@ public class Builder : MonoBehaviour
     public void Remove1ToBrickAmount() // function to remove a brick to the players inventory
     {
         amountOfBricksCollected--; // amountOfBricksCollected - 1 on every call
-       // bDeets.SaveBuilderDetails(); // force save game
+      // bDeets.SaveBuilderDetails(); // force save game
     }
 }

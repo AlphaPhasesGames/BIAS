@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 6273828568289552830}
   - component: {fileID: 6945409258229513027}
   - component: {fileID: 3277285731657210338}
+  - component: {fileID: 5583970547274516048}
   m_Layer: 0
   m_Name: Brick Rotated
   m_TagString: Brick
@@ -226,3 +227,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   brickName: Brick Rotated
   rb: {fileID: 6273828568289552830}
+--- !u!114 &5583970547274516048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8402732040057687446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1403a968fc2b814d9632ba15dce16ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hasThisObjectBeenCollected: 0

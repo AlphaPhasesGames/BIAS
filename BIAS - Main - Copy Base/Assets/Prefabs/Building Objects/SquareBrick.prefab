@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 4761366309416497988}
   - component: {fileID: 7939629867139753684}
   - component: {fileID: 1745645960916317334}
+  - component: {fileID: 5058607236414040623}
   m_Layer: 0
   m_Name: SquareBrick
   m_TagString: Brick
@@ -226,3 +227,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   brickName: 
   rb: {fileID: 7939629867139753684}
+--- !u!114 &5058607236414040623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7223466139512660175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1403a968fc2b814d9632ba15dce16ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hasThisObjectBeenCollected: 0
