@@ -334,12 +334,13 @@ public class PlayerController : MonoBehaviour
                 if (obj_Array.arrayPos == 0) // if Brick is in the default postion 
                 {
                     // deleteBrickActive = false;
-                    if (Input.GetMouseButtonDown(0)) // on mouse click
+                    if (Input.GetMouseButtonDown(0) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) // on mouse click
                     {
 
                         Ray position = mainCam.ScreenPointToRay(Input.mousePosition); // new RAY decalred as position and is set to the mouse position called once per frame
                         if (Physics.Raycast(position, out hit, 100f)) // if the raycast from position hits in distance of 100f
                         {
+
                             if (hit.transform.CompareTag("Ground")) // if raycast hits ground
                             {
                                 Debug.Log(hit.point); // log the position it hits
@@ -377,7 +378,7 @@ public class PlayerController : MonoBehaviour
                 if (obj_Array.arrayPos == 1) // if brick is in rotated position
                 {
                     // deleteBrickActive = false;
-                    if (Input.GetMouseButtonDown(0)) // on mouse click
+                    if (Input.GetMouseButtonDown(0) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) // on mouse click
                     {
                         Ray position = mainCam.ScreenPointToRay(Input.mousePosition); // new RAY decalred as position and is set to the mouse position called once per frame
                         if (Physics.Raycast(position, out hit, 100f)) // if the raycast from position hits in distance of 100f
@@ -417,7 +418,7 @@ public class PlayerController : MonoBehaviour
                     // brickForwardDirection = false;
                     Debug.Log("This executes");
                     // deleteBrickActive = false;
-                    if (Input.GetMouseButtonDown(0)) // on mouse click
+                    if (Input.GetMouseButtonDown(0) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) // on mouse click
                     {
                         Debug.Log("This code exectues as wekk");
                         Ray position = mainCam.ScreenPointToRay(Input.mousePosition); // new RAY decalred as position and is set to the mouse position called once per frame
@@ -462,7 +463,7 @@ public class PlayerController : MonoBehaviour
                     // brickForwardDirection = false;
                     Debug.Log("This executes");
                     // deleteBrickActive = false;
-                    if (Input.GetMouseButtonDown(0)) // on mouse click
+                    if (Input.GetMouseButtonDown(0) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) // on mouse click
                     {
                         Debug.Log("This code exectues as wekk");
                         Ray position = mainCam.ScreenPointToRay(Input.mousePosition); // new RAY decalred as position and is set to the mouse position called once per frame

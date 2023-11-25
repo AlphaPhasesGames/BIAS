@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4325698172615690407}
   - component: {fileID: 1322196267552808129}
   - component: {fileID: 7293485440834675296}
-  - component: {fileID: 8866920021901968554}
+  - component: {fileID: 5655584743064745687}
   m_Layer: 0
   m_Name: BrickLayer2
   m_TagString: Brick
@@ -128,7 +128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   brickName: Normal Brick Upper Layer
   rb: {fileID: 1322196267552808129}
---- !u!114 &8866920021901968554
+--- !u!114 &5655584743064745687
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

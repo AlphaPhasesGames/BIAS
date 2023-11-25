@@ -17,11 +17,14 @@ public class PickUpLooseBricks : MonoBehaviour
 
     private void OnMouseDown() // if mouse is over this object and clicked
     {
-
-        Builder.instance.Add1ToBrickAmount();
-        bDeets.SaveBuilderDetails();
-        Destroy(this.gameObject);
-        Destroy(transform.parent.gameObject);
+        if (PlayerController.instance.deleteBrickActive)
+        {
+            Builder.instance.Add1ToBrickAmount();
+            bDeets.SaveBuilderDetails();
+            Destroy(this.gameObject);
+            Destroy(transform.parent.gameObject);
+        }
+       
 
     }
 }

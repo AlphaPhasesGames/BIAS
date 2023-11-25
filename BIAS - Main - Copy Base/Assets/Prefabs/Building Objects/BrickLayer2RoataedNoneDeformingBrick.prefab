@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 8296983967412480496}
   - component: {fileID: 6735797228809420182}
   - component: {fileID: 3001621727482917166}
-  - component: {fileID: 7302843490671715086}
+  - component: {fileID: 8557554341909397202}
   m_Layer: 0
   m_Name: BrickLayer2
   m_TagString: Brick
@@ -210,7 +210,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   brickName: 
   rb: {fileID: 6735797228809420182}
---- !u!114 &7302843490671715086
+--- !u!114 &8557554341909397202
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
