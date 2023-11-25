@@ -182,7 +182,7 @@ public class PlayerController : MonoBehaviour
                     transBrickRotated.SetActive(false); // set rotated transpare brick to inactive
                     transHalfBrick.SetActive(false);
                     //deleteBrickActive = false;
-                    if (Input.GetMouseButtonDown(0)) // on mouse click
+                    if (Input.GetMouseButtonDown(0) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) // on mouse click
                     {
                         Ray position = mainCam.ScreenPointToRay(Input.mousePosition); // new RAY decalred as position and is set to the mouse position called once per frame
                         RaycastHit hitInfo; // get a raycast variable to detect what we hit
@@ -338,7 +338,7 @@ public class PlayerController : MonoBehaviour
                     {
 
                         Ray position = mainCam.ScreenPointToRay(Input.mousePosition); // new RAY decalred as position and is set to the mouse position called once per frame
-                        if (Physics.Raycast(position, out hit, 100f, ~ignoreMe)) // if the raycast from position hits in distance of 100f
+                        if (Physics.Raycast(position, out hit, 100f)) // if the raycast from position hits in distance of 100f
                         {
                             if (hit.transform.CompareTag("Ground")) // if raycast hits ground
                             {
@@ -380,7 +380,7 @@ public class PlayerController : MonoBehaviour
                     if (Input.GetMouseButtonDown(0)) // on mouse click
                     {
                         Ray position = mainCam.ScreenPointToRay(Input.mousePosition); // new RAY decalred as position and is set to the mouse position called once per frame
-                        if (Physics.Raycast(position, out hit, 100f, ~ignoreMe)) // if the raycast from position hits in distance of 100f
+                        if (Physics.Raycast(position, out hit, 100f)) // if the raycast from position hits in distance of 100f
                         {
                             if (hit.transform.CompareTag("Ground")) // if raycst detects tag Ground
                             {
@@ -421,7 +421,7 @@ public class PlayerController : MonoBehaviour
                     {
                         Debug.Log("This code exectues as wekk");
                         Ray position = mainCam.ScreenPointToRay(Input.mousePosition); // new RAY decalred as position and is set to the mouse position called once per frame
-                        if (Physics.Raycast(position, out hit, 100f, ~ignoreMe)) // if the raycast from position hits in distance of 100f
+                        if (Physics.Raycast(position, out hit, 100f)) // if the raycast from position hits in distance of 100f
                         {
                             if (hit.transform.CompareTag("Ground")) // if raycast hits ground
                             {
@@ -466,7 +466,7 @@ public class PlayerController : MonoBehaviour
                     {
                         Debug.Log("This code exectues as wekk");
                         Ray position = mainCam.ScreenPointToRay(Input.mousePosition); // new RAY decalred as position and is set to the mouse position called once per frame
-                        if (Physics.Raycast(position, out hit, 100f, ~ignoreMe)) // if the raycast from position hits in distance of 100f
+                        if (Physics.Raycast(position, out hit, 100f)) // if the raycast from position hits in distance of 100f
                         {
                             if (hit.transform.CompareTag("Ground")) // if raycast hits ground
                             {
