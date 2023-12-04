@@ -7,7 +7,7 @@ public class BrickSave : MonoBehaviour
     [Header("BrickDetails")] // header for the bricks details
     public string brickName; // string to store the brick name, players can edit
     public Rigidbody rb;
-
+  //  public bool isKinematic = true;
     private void Awake()  // on awake
     {
         SaveSystem.bricks.Add(this);  // add this brick to the list of saved objects
@@ -28,28 +28,41 @@ public class BrickSave : MonoBehaviour
         }//
 
     }
+    /*
+    private void OnTriggerEnter(Collider brick, bool isBrickStck)
+    {
+        Debug.Log("This new code triggers");
+        if (brick.CompareTag("Cement"))
+        {
+            isBrickStck = true;
+            rb.isKinematic = isBrickStck;
+            Debug.Log("Brick At");
+        }
+    }
 
+     */
     private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Cement"))
-        {
-            rb.isKinematic = true;
-        }
-    }
+           {
+               if (other.CompareTag("Cement"))
+               {
+                   rb.isKinematic = true;
+               }
+           }
 
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.CompareTag("Cement"))
-        {
-            rb.isKinematic = true;
-        }
-    }
+           private void OnTriggerStay(Collider other)
+           {
+               if (other.CompareTag("Cement"))
+               {
+                   rb.isKinematic = true;
+               }
+           }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Cement"))
-        {
-            rb.isKinematic = false;
-        }
-    }
+           private void OnTriggerExit(Collider other)
+           {
+               if (other.CompareTag("Cement"))
+               {
+                   rb.isKinematic = false;
+               }
+           }
+     
 }

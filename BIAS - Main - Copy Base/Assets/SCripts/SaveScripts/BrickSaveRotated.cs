@@ -7,6 +7,7 @@ public class BrickSaveRotated : MonoBehaviour
     [Header("BrickDetails")] // header for the  Rotated bricks details
     public string brickName; // string to store the Rotated brick name, players can edit
     public Rigidbody rb;
+    //    public bool isKinematic = true;
     private void Awake() // on awake
     {
         SaveSystem.bricksRotated.Add(this); // add this otated brick to the list of saved objects
@@ -24,28 +25,42 @@ public class BrickSaveRotated : MonoBehaviour
         }
 
     }
+    /*
+ private void OnTriggerEnter(Collider brick, bool isBrickStck)
+ {
+     Debug.Log("This new code triggers");
+     if (brick.CompareTag("Cement"))
+     {
+         isBrickStck = true;
+         rb.isKinematic = isBrickStck;
+         Debug.Log("Brick At");
+     }
+ }
 
+     */
     private void OnTriggerEnter(Collider other)
+{
+    if (other.CompareTag("Cement"))
     {
-        if (other.CompareTag("Cement"))
-        {
-            rb.isKinematic = true;
-        }
+        rb.isKinematic = true;
     }
+}
 
-    private void OnTriggerStay(Collider other)
+private void OnTriggerStay(Collider other)
+{
+    if (other.CompareTag("Cement"))
     {
-        if (other.CompareTag("Cement"))
-        {
-            rb.isKinematic = true;
-        }
+        rb.isKinematic = true;
     }
+}
 
-    private void OnTriggerExit(Collider other)
+private void OnTriggerExit(Collider other)
+{
+    if (other.CompareTag("Cement"))
     {
-        if (other.CompareTag("Cement"))
-        {
-            rb.isKinematic = false;
-        }
+        rb.isKinematic = false;
     }
+}
+
+
 }

@@ -73,7 +73,7 @@ public class PlayerController : MonoBehaviour
     public GameObject transHalfBrick; // gameobject to hold the transparent brick icon 
     public GameObject transCementBrick;
 
-
+    private float move, movespeed, rotation, rotatespeed;
     private void Awake() // on awake of script
     {
         isBuilding = false; // player is not building on awake and can move
@@ -102,10 +102,14 @@ public class PlayerController : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>(); // get NavMeshAgent component and apply it to agent .. this is redundant, we have set it in the inspector 
         bricksThePlayerHasToBuildWith = builder.amountOfBricksCollected;
+        movespeed = 5f;
+        rotatespeed = 100f;
     }
     // Update is called once per frame
     void Update()
     {
+        move = Input.GetAxis("Vertical") * movespeed * Time.deltaTime;
+        rotation = Input.GetAxis("Horizontal") * rotatespeed * Time.deltaTime;
 
         if (Input.GetKeyDown(KeyCode.L))
         {
@@ -416,7 +420,7 @@ public class PlayerController : MonoBehaviour
                 if (obj_Array.arrayPos == 2) // if Brick is in the default postion 
                 {
                     // brickForwardDirection = false;
-                    Debug.Log("This executes");
+                 //   Debug.Log("This executes");
                     // deleteBrickActive = false;
                     if (Input.GetMouseButtonDown(0) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) // on mouse click
                     {
@@ -461,7 +465,7 @@ public class PlayerController : MonoBehaviour
                 if (obj_Array.arrayPos == 3) // if Brick is in the default postion 
                 {
                     // brickForwardDirection = false;
-                    Debug.Log("This executes");
+                   // Debug.Log("This executes");
                     // deleteBrickActive = false;
                     if (Input.GetMouseButtonDown(0) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) // on mouse click
                     {
