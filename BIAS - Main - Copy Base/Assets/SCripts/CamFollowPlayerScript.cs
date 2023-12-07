@@ -1,37 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
 
 public class CamFollowPlayerScript : MonoBehaviour
 {
-    //----------- This script rotates the cam in iso veiw
+    //----------- This script rotates the cam in isometric veiw
 
     
     public GameObject player; // declare player gameobject
-                              //  private Vector3 offset; // create declare vector 3 for the offset betwee the camera and the player
-    private Vector3 spinCam; // declare vector 3 for the camera
+    public Vector3 spinCam; // declare vector 3 for the camera
     public float camSpinSpeed; // declare float to hold the speed of the camera rotation
     public bool isCameraFollwingMouse;
-    public Cursor mouseCurson;
+    public float mSpeed; // Scale. Speed of the movement
+    public Camera isoCam;
+    public GameObject eastDirectrion;
 
-    float mDelta = 10; // Pixels. The width border at the edge in which the movement work
-    float mSpeed = 3.0f; // Scale. Speed of the movement
-
-    private Vector3 mRightDirection = Vector3.right; // Direction the camera should move when on the right edge
-    private Vector3 mleftDirection = Vector3.left; // Direction the camera should move when on the right edge
-    private Vector3 mUpDirection = Vector3.up; // Direction the camera should move when on the right edge
-    private Vector3 mDownDirection = Vector3.down; // Direction the camera should move when on the right edge
+    private void Start()
+    {
+        mSpeed = 5;
+        camSpinSpeed = 20f;
+    }
 
     private void Update()
     {
-        // spinCam is a new vector 3, taking the axis from the unity input settings on the X and Y axis and 0 on the Z axis
-        spinCam = new Vector3(Input.GetAxis("VerticalIso"), Input.GetAxis("HorizontalIso"), 0.0f);
-        // rotate the camera using the vector 3 from the spin cam, by the spinCamSpeed float by time.delta time. 
-        this.transform.Rotate(spinCam * camSpinSpeed * Time.deltaTime);
-
-
+        spinCam = new Vector3(Input.GetAxis("VerticalIso"), Input.GetAxis("HorizontalIso"), 0.0f); // spinCam is a new vector 3, taking the axis from the unity input settings on the X and Y axis and 0 on the Z axis
+        this.transform.Rotate(spinCam * camSpinSpeed * Time.deltaTime); // rotate the camera using the vector 3 from the spin cam, by the spinCamSpeed float by time.delta time. 
+           
         if (Input.GetKeyDown(KeyCode.M))
         {
             isCameraFollwingMouse = !isCameraFollwingMouse;
@@ -51,20 +45,27 @@ public class CamFollowPlayerScript : MonoBehaviour
             if (Input.mousePosition.x >= Screen.width )
             {
                 // Move the camera
-                transform.position += mRightDirection * Time.deltaTime * mSpeed;
+               transform.position += isoCam.transform.right * Time.deltaTime * mSpeed;
             }
 
             if (Input.mousePosition.x <= 0)
             {
              // mm  // Move the camera
-               transform.position += mleftDirection * Time.deltaTime * mSpeed;
+               transform.position += -isoCam.transform.right * Time.deltaTime * mSpeed;
             }
 
-           
+            if (Input.mousePosition.y >= Screen.height)
+            {
+                // Move the camera
+                transform.position += eastDirectrion.transform.forward * Time.deltaTime * mSpeed;
+            }
+
+            if (Input.mousePosition.y <= 0)
+            {
+                // mm  // Move the camera
+                transform.position += -eastDirectrion.transform.forward * Time.deltaTime * mSpeed;
+            }
         }
-       
     }
-
-
 }
 
