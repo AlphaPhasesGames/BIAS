@@ -11,6 +11,7 @@ TagManager:
   - PickupBrick
   - Cement
   - manager
+  - WoodDoor
   layers:
   - Default
   - TransparentFX

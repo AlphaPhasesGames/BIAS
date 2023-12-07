@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class InventoryUIPanal : MonoBehaviour
 {
 
-    public Button normalBrickButton, rotatedBrickButton, halfBrickButton, cementButton, deletedBrick;
+    public Button normalBrickButton, rotatedBrickButton, halfBrickButton, cementButton, woodDoorFrame, deletedBrick;
     [Header("Textures")]
     public Texture2D cursorHammerTexture;
     public CursorMode cursorMode = CursorMode.Auto;
@@ -21,6 +21,7 @@ public class InventoryUIPanal : MonoBehaviour
         halfBrickButton.onClick.AddListener(SelectHalfBrick);
         cementButton.onClick.AddListener(SelectCement);
         deletedBrick.onClick.AddListener(DeleteBrick);
+        woodDoorFrame.onClick.AddListener(SelectDoor);
     }
 
     // Update is called once per frame
@@ -59,6 +60,14 @@ public class InventoryUIPanal : MonoBehaviour
     public void SelectCement()
     {
         PlayerController.instance.obj_Array.arrayPos = 3;
+        PlayerController.instance.isBuilding = true;
+        PlayerController.instance.deleteBrickActive = false;
+        TurnOfDeleteBrick();
+    }
+
+    public void SelectDoor()
+    {
+        PlayerController.instance.obj_Array.arrayPos = 4;
         PlayerController.instance.isBuilding = true;
         PlayerController.instance.deleteBrickActive = false;
         TurnOfDeleteBrick();

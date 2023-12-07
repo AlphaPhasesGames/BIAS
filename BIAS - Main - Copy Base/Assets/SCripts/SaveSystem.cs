@@ -15,12 +15,14 @@ public class SaveSystem : MonoBehaviour
     [SerializeField] BrickSaveRotated brickPrefabRotated; // access the BrickSaveRotated file call it brickPrefabRotated
     [SerializeField] BrickHalfSave halfBrickPrefab; // access the BrickHalfSafe halfBrickPrefab
     [SerializeField] CementSave cementBrickPrefab;
+    [SerializeField] WoodDoorSave woodDoorPrefab;
 
 
     public static List<BrickSave> bricks = new List<BrickSave>(); // create Bricksave list to store bricks
     public static List<BrickSaveRotated> bricksRotated = new List<BrickSaveRotated>(); // create BrickRotates list to store  Rotated bricks
     public static List<BrickHalfSave> bricksHalves = new List<BrickHalfSave>(); // create brick halves list to store half bricks
     public static List<CementSave> cementBrick = new List<CementSave>();
+    public static List<WoodDoorSave> woodDoor = new List<WoodDoorSave>();
 
 
     const string BRICK_SUB = "/brick"; // create a string to store the location of brick saves - this is in appdata/locallow/alphaphases
@@ -36,8 +38,10 @@ public class SaveSystem : MonoBehaviour
     const string CEMENT_COUNT_SUB = "/cementBrick.count"; // create a string to store the count of brickhalf.count - this is in appdata/locallow/alphaphases
 
     const string DETAILS_SUB = "/details"; // create a string to store the location of brick saves - this is in appdata/locallow/alphaphases
-   // const string DETAILS_COUNT_SUB = "/details.count"; // create a string to store the count of brickhalf.count - this is in appdata/locallow/alphaphases
+                                           // const string DETAILS_COUNT_SUB = "/details.count"; // create a string to store the count of brickhalf.count - this is in appdata/locallow/alphaphases
 
+    const string WODD_DOOR_SUB = "/woodDoor"; // create a string to store the location of brick saves - this is in appdata/locallow/alphaphases
+    const string WOOD_COUNT_SUB = "/woodDoor.count"; // create a string to store the count of bricks.count - this is in appdata/locallow/alphaphases
 
     private void Awake() // on awake of script
     {
@@ -46,6 +50,7 @@ public class SaveSystem : MonoBehaviour
         LoadRotatedBrick(); // load rotated bricks save
         LoadHalfBrick(); // load half bricks save/
         LoadCement();
+        LoadWoodDoor();
         //LoadBuilderDetails();
         
     }
@@ -56,6 +61,7 @@ public class SaveSystem : MonoBehaviour
         SaveRotatedBrick(); // call SaveRotatedbrick function and save rotated bricks pos and rot
         SaveHalfBrick(); // call SaveHalfBrick function and save half bricks pos and rot/
         SaveCement();
+        SaveWoodDoor();
         //SaveBuildersDetails();
     }
     
@@ -298,6 +304,66 @@ public class SaveSystem : MonoBehaviour
                 CementSave cement = Instantiate(cementBrickPrefab, position, rotation); // instantiate brick from Bricksave Data in saved pos and rot
                 cement.brickName = data.brickType4; // set brick name to data in save file
                 Debug.Log("Loaded 20 File Exists%");
+            }
+
+            else
+            {
+                Debug.LogError("Path not found in " + path + i); // display log in console
+            }
+        }
+    }
+
+    void SaveWoodDoor() // save brick function
+    {
+        BinaryFormatter formatter = new BinaryFormatter(); // create a new BinaryFormatter
+        string path = Application.persistentDataPath + WODD_DOOR_SUB + SceneManager.GetActiveScene().buildIndex; // create save path and use persistant data path plus the BRICK string plus the active scene. 
+        string countPath = Application.persistentDataPath + WOOD_COUNT_SUB + SceneManager.GetActiveScene().buildIndex; // create save count path and use persistant data path plus the BRICK_COUNT string plus the active scene. 
+
+        FileStream countStream = new FileStream(countPath, FileMode.Create); // create a new filestream
+
+        formatter.Serialize(countStream, woodDoor.Count); // format saves using binary
+        countStream.Close(); // close the count stream
+
+        for (int i = 0; i < woodDoor.Count; i++) // for i is less that brickscount, increment i
+        {
+            FileStream stream = new FileStream(path + i, FileMode.Create); // create new filestream
+            BrickData data = new BrickData(woodDoor[i]); // create new brickdata save file
+            formatter.Serialize(stream, data); // serialize file
+            stream.Close(); // close stream
+        }
+    }
+
+    void LoadWoodDoor() // load brick function
+    {
+        BinaryFormatter formatter = new BinaryFormatter(); // create a new BinaryFormatter
+        string path = Application.persistentDataPath + WODD_DOOR_SUB + SceneManager.GetActiveScene().buildIndex; // load save path and use persistant data path plus the BRICK string plus the active scene. 
+        string countPath = Application.persistentDataPath + WOOD_COUNT_SUB + SceneManager.GetActiveScene().buildIndex; // load save count path and use persistant data path plus the BRICK_COUNT string plus the active scene. 
+        int woodDoorCount = 0; // create brickCount int and initilize it as 0
+
+        if (File.Exists(countPath)) // if there is a save file
+        {
+            FileStream countStream = new FileStream(countPath, FileMode.Open); // open filestream
+            woodDoorCount = (int)formatter.Deserialize(countStream); // deserialize file and assign to brickCount
+            countStream.Close(); // close stream
+        }
+
+        else // if there is no save file
+        {
+            Debug.LogError("Path not found in stream" + countPath); // display log in console
+        }
+        for (int i = 0; i < woodDoorCount; i++) // for i less than brickCount, increment i
+        {
+            if (File.Exists(path + i)) //if a save file exists
+            {
+                FileStream stream = new FileStream(path + i, FileMode.Open); // open stream
+                BrickData data = formatter.Deserialize(stream) as BrickData; // deserialize save from brick data
+
+                stream.Close(); // close the stream
+                Vector3 position = new Vector3(data.position[0], data.position[1], data.position[2]); // set the bricks position to the values in the save file
+                Quaternion rotation = new Quaternion(data.rotation[0], data.rotation[1], data.rotation[2], data.rotation[3]); // set the bricks rotation to the values in the save file
+
+                WoodDoorSave woodDoor = Instantiate(woodDoorPrefab, position, rotation); // instantiate brick from Bricksave Data in saved pos and rot
+                woodDoor.doorName = data.brickType5; // set brick name to data in save file
             }
 
             else

@@ -46,11 +46,15 @@ public class PlayerController : MonoBehaviour
     [Header("Bools")]
     public bool isBuilding; // declare bool to detect when were building or not
     public bool isTransBrickShowing; // declare bool to detect when the transulcent brick is showing us where our bricks will be placed
+
     public bool brickForwardDirection; // declare bool to detect when  the brick is in the default position
     public bool transBrickForwardDirection; // declare bool to detect when the translucent brick is showing in the default rotation
+
     public bool playerBuildingLayer2; // Decalre bool to detect if were building above ground layer
+
     public bool halfBrickForwardDirection;
     public bool transHalfBrickForwardDirection;
+
     public bool buildingOtherBricks;
     public bool playerFirstPerson; // bool to detect wether the player is in First Person 
     public bool deleteBrickActive; // declare bool to detect when the destroy bricks mode is active
@@ -62,6 +66,7 @@ public class PlayerController : MonoBehaviour
     public List<GameObject> bricks = new List<GameObject>(); //  list to store bricks create in called bricks
     [Header("Game Objects - bricks and building stuff")]
     public GameObject brickToBuild; // gameobject to hold brick object
+    public GameObject woodDoorToBuild; // gameobject to hold brick object
     public GameObject brickToBuildRotated; // gameobject to hold the brick when rotated object
     public GameObject brickToBuildLayer2; //  Gameobject to hold the brick when on a higher level object
     public GameObject brickToBuildLayer2Rotated; // Game object to hold the brick then on a higher level rotated
@@ -72,6 +77,7 @@ public class PlayerController : MonoBehaviour
     public GameObject transBrickRotated; // game object to hold the transparent brick icon when rotated
     public GameObject transHalfBrick; // gameobject to hold the transparent brick icon 
     public GameObject transCementBrick;
+    public GameObject transWoodDoor;
 
     private float move, movespeed, rotation, rotatespeed;
     private void Awake() // on awake of script
@@ -81,6 +87,7 @@ public class PlayerController : MonoBehaviour
         transBrickForwardDirection = false;   //Trasparent brick is in default position
         isTransBrickShowing = false; // trasparent brick is hideen 
         transBrick.SetActive(false); //set transparent brick to inactive
+        transWoodDoor.SetActive(false);
         transHalfBrick.SetActive(false);
         transBrickRotated.SetActive(false); // set trasparent brick rotated to inactive
        // transCementBrick.SetActive(false);
@@ -185,6 +192,7 @@ public class PlayerController : MonoBehaviour
                     transBrick.SetActive(false); // set transparent brick to inactive
                     transBrickRotated.SetActive(false); // set rotated transpare brick to inactive
                     transHalfBrick.SetActive(false);
+                    transWoodDoor.SetActive(false);
                     //deleteBrickActive = false;
                     if (Input.GetMouseButtonDown(0) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) // on mouse click
                     {
@@ -223,6 +231,7 @@ public class PlayerController : MonoBehaviour
                             transBrickRotated.SetActive(false); // disable the rotated traparent brick
                             transHalfBrick.SetActive(false); // set traparent brick to inactive
                             transCementBrick.SetActive(false); // set traparent brick to inactive transCementBrick.SetActive(true); // set traparent brick to inactive                           // brickHalfToBuild.SetActive(false); // set traparent brick to inactive
+                            transWoodDoor.SetActive(false);
                         }
 
                         if (obj_Array.arrayPos == 1)  // if transpare brick in the rotated position 
@@ -232,6 +241,7 @@ public class PlayerController : MonoBehaviour
                             transBrick.SetActive(false); // enable the rotated traparent brick
                             transHalfBrick.SetActive(false); // set traparent brick to inactive
                             transCementBrick.SetActive(false); // set traparent brick to inactive                                //  brickHalfToBuild.SetActive(false); // set traparent brick to inactive
+                            transWoodDoor.SetActive(false);
                         }
 
                         if (obj_Array.arrayPos == 2)  // if transpare brick in the rotated position 
@@ -241,6 +251,7 @@ public class PlayerController : MonoBehaviour
                             transBrickRotated.SetActive(false); // disable the rotated traparent brick
                             transBrick.SetActive(false); // enable the rotated traparent brick
                             transCementBrick.SetActive(false); // set traparent brick to inactive
+                            transWoodDoor.SetActive(false);
                         }
 
                         if (obj_Array.arrayPos == 3)  // if transpare brick in the rotated position 
@@ -250,7 +261,18 @@ public class PlayerController : MonoBehaviour
                             transHalfBrick.SetActive(false);
                             transBrickRotated.SetActive(false); // disable the rotated traparent brick
                             transBrick.SetActive(false); // enable the rotated traparent brick
+                            transWoodDoor.SetActive(false);
+                        }
 
+                        if (obj_Array.arrayPos == 4)  // if transpare brick in the rotated position 
+                        {
+                            transWoodDoor.SetActive(true);
+                            transWoodDoor.transform.position = cameraRayHit.point; // Rotated transparent brick position is where the raycast hits the ground -- this is important as if not set to the ground, the traparent brick can float anywhere between the two raycast position ( raycast location and the hit point)
+                            transCementBrick.SetActive(false); // set traparent brick to inactive
+                            transHalfBrick.SetActive(false);
+                            transBrickRotated.SetActive(false); // disable the rotated traparent brick
+                            transBrick.SetActive(false); // enable the rotated traparent brick
+                           
                         }
 
                     }
@@ -264,6 +286,7 @@ public class PlayerController : MonoBehaviour
                             transBrickRotated.SetActive(false); // disable the rotated traparent brick
                             transCementBrick.SetActive(false); // set traparent brick to inactive  
                             transHalfBrick.SetActive(false); // set traparent brick to inactive// brickHalfToBuild.SetActive(false); // set traparent brick to inactive
+                            transWoodDoor.SetActive(false);
                         }
 
                         if (obj_Array.arrayPos == 1)  // if transpare brick in the rotated position 
@@ -273,6 +296,7 @@ public class PlayerController : MonoBehaviour
                             transBrick.SetActive(false); // enable the rotated traparent brick
                             transCementBrick.SetActive(false); // set traparent brick to inactive 
                             transHalfBrick.SetActive(false); // set traparent brick to inactive// brickHalfToBuild.SetActive(false); // set traparent brick to inact// brickHalfToBuild.SetActive(false); // set traparent brick to inactive
+                            transWoodDoor.SetActive(false);
                         }
 
                         if (obj_Array.arrayPos == 2)  // if transpare brick in the rotated position 
@@ -282,6 +306,7 @@ public class PlayerController : MonoBehaviour
                             transBrickRotated.SetActive(false); // disable the rotated traparent brick
                             transCementBrick.SetActive(false); // set traparent brick to inactive   
                             transBrick.SetActive(false); // set traparent brick to active// transBrick.SetActive(false); // enable the rotated traparent brick
+                            transWoodDoor.SetActive(false);
                         }
 
                         if (obj_Array.arrayPos == 3)  // if transpare brick in the rotated position 
@@ -291,7 +316,19 @@ public class PlayerController : MonoBehaviour
                             transHalfBrick.SetActive(false); // set traparent brick to inactive
                             transBrickRotated.SetActive(false); // disable the rotated traparent brick
                             transBrick.SetActive(false); // set traparent brick to active// transBrick.SetActive(false); // enable the rotated traparent brick
+                            transWoodDoor.SetActive(false);
                         }
+
+                        if (obj_Array.arrayPos == 4)  // if transpare brick in the rotated position 
+                        {
+                            transWoodDoor.transform.position = cameraRayHit.point; // Rotated transparent brick position is where the raycast hits the ground -- this is important as if not set to the ground, the traparent brick can float anywhere between the two raycast position ( raycast location and the hit point)
+                            transCementBrick.SetActive(false); // set traparent brick to inactive
+                            transHalfBrick.SetActive(false);
+                            transBrickRotated.SetActive(false); // disable the rotated traparent brick
+                            transBrick.SetActive(false); // enable the rotated traparent brick
+                            transWoodDoor.SetActive(true);
+                        }
+
                     }
 
                     if (cameraRayHit.transform.CompareTag("Cement")) // if raycast hits the ground
@@ -303,6 +340,8 @@ public class PlayerController : MonoBehaviour
                             transBrickRotated.SetActive(false); // disable the rotated traparent brick
                             transCementBrick.SetActive(false); // set traparent brick to inactive  
                             transHalfBrick.SetActive(false); // set traparent brick to inactive// brickHalfToBuild.SetActive(false); // set traparent brick to inactive
+                            transWoodDoor.SetActive(false);
+
                         }
 
                         if (obj_Array.arrayPos == 1)  // if transpare brick in the rotated position 
@@ -312,6 +351,7 @@ public class PlayerController : MonoBehaviour
                             transBrick.SetActive(false); // enable the rotated traparent brick
                             transCementBrick.SetActive(false); // set traparent brick to inactive 
                             transHalfBrick.SetActive(false); // set traparent brick to inactive// brickHalfToBuild.SetActive(false); // set traparent brick to inact// brickHalfToBuild.SetActive(false); // set traparent brick to inactive
+                            transWoodDoor.SetActive(false);
                         }
 
                         if (obj_Array.arrayPos == 2)  // if transpare brick in the rotated position 
@@ -330,6 +370,18 @@ public class PlayerController : MonoBehaviour
                             transHalfBrick.SetActive(false); // set traparent brick to inactive
                             transBrickRotated.SetActive(false); // disable the rotated traparent brick
                             transBrick.SetActive(false); // set traparent brick to active// transBrick.SetActive(false); // enable the rotated traparent brick
+                            transWoodDoor.SetActive(false);
+
+                        }
+
+                        if (obj_Array.arrayPos == 4)  // if transpare brick in the rotated position 
+                        {
+                            transWoodDoor.transform.position = cameraRayHit.point; // Rotated transparent brick position is where the raycast hits the ground -- this is important as if not set to the ground, the traparent brick can float anywhere between the two raycast position ( raycast location and the hit point)
+                            transCementBrick.SetActive(false); // set traparent brick to inactive
+                            transHalfBrick.SetActive(false);
+                            transBrickRotated.SetActive(false); // disable the rotated traparent brick
+                            transBrick.SetActive(false); // enable the rotated traparent brick
+                            transWoodDoor.SetActive(true);
                         }
                     }
                 }
@@ -506,6 +558,53 @@ public class PlayerController : MonoBehaviour
                         Debug.Log(hit.collider); // log the collider it hits
                     }
                 }
+
+                if (obj_Array.arrayPos == 4) // if Brick is in the default postion 
+                {
+                    // brickForwardDirection = false;
+                    //   Debug.Log("This executes");
+                    // deleteBrickActive = false;
+                    if (Input.GetMouseButtonDown(0) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) // on mouse click
+                    {
+                        Debug.Log("This code exectues as wekk");
+                        Ray position = mainCam.ScreenPointToRay(Input.mousePosition); // new RAY decalred as position and is set to the mouse position called once per frame
+                        if (Physics.Raycast(position, out hit, 100f)) // if the raycast from position hits in distance of 100f
+                        {
+                            if (hit.transform.CompareTag("Ground")) // if raycast hits ground
+                            {
+                                Debug.Log(hit.point); // log the position it hits
+                                Debug.Log(hit.transform.tag); // log the tag it hits
+                                Instantiate(woodDoorToBuild, hit.point, Quaternion.identity); // create brick at hitpoint(Ground) in its original rotation;
+                                bricks.Add(woodDoorToBuild); //  add brick to list of bricks
+                                builder.Remove1ToBrickAmount();
+
+                            }
+
+                            if (hit.transform.CompareTag("Brick"))  // if raycast hits bricks
+                            {
+                                Debug.Log(hit.point); // log the position it hits
+                                Debug.Log(hit.transform.tag); // log the position it hits
+                                                              //agent.destination = hit.point; // move agent (player) to the hit position.
+                                Instantiate(woodDoorToBuild, hit.point, Quaternion.identity); // create brick upper layer at hitpoint(Upper Bricks) in its original rotation;
+                                bricks.Add(woodDoorToBuild); // add upper layer bricks to list of bricks
+                                builder.Remove1ToBrickAmount();
+                            }
+
+                            if (hit.transform.CompareTag("Cement"))  // if raycast hits bricks
+                            {
+                                Debug.Log(hit.point); // log the position it hits
+                                Debug.Log(hit.transform.tag); // log the position it hits
+                                                              //agent.destination = hit.point; // move agent (player) to the hit position.
+                                Instantiate(woodDoorToBuild, hit.point, Quaternion.identity); // create brick upper layer at hitpoint(Upper Bricks) in its original rotation;
+                                bricks.Add(woodDoorToBuild); // add upper layer bricks to list of bricks
+                                builder.Remove1ToBrickAmount();
+                            }
+                        }
+                        Debug.Log(hit.collider); // log the collider it hits
+                    }
+
+                }
+
 
                 if (deleteBrickActive)
                 {
