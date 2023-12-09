@@ -67,6 +67,7 @@ public class PlayerController : MonoBehaviour
     [Header("Game Objects - bricks and building stuff")]
     public GameObject brickToBuild; // gameobject to hold brick object
     public GameObject woodDoorToBuild; // gameobject to hold brick object
+    public GameObject woodDoorToBuildLayer2; // gameobject to hold brick object
     public GameObject brickToBuildRotated; // gameobject to hold the brick when rotated object
     public GameObject brickToBuildLayer2; //  Gameobject to hold the brick when on a higher level object
     public GameObject brickToBuildLayer2Rotated; // Game object to hold the brick then on a higher level rotated
@@ -585,8 +586,8 @@ public class PlayerController : MonoBehaviour
                                 Debug.Log(hit.point); // log the position it hits
                                 Debug.Log(hit.transform.tag); // log the position it hits
                                                               //agent.destination = hit.point; // move agent (player) to the hit position.
-                                Instantiate(woodDoorToBuild, hit.point, Quaternion.identity); // create brick upper layer at hitpoint(Upper Bricks) in its original rotation;
-                                bricks.Add(woodDoorToBuild); // add upper layer bricks to list of bricks
+                                Instantiate(woodDoorToBuildLayer2, hit.point, Quaternion.identity); // create brick upper layer at hitpoint(Upper Bricks) in its original rotation;
+                                bricks.Add(woodDoorToBuildLayer2); // add upper layer bricks to list of bricks
                                 builder.Remove1ToBrickAmount();
                             }
 

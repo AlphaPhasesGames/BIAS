@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 4193111741851631976}
   - component: {fileID: 3627254871467975628}
   - component: {fileID: 3424854538243675567}
+  - component: {fileID: 394800257236444838}
   m_Layer: 0
   m_Name: Cel Shaded Door0,2
   m_TagString: Untagged
@@ -288,3 +289,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   doorName: 
   rB: {fileID: 4193111741851632020}
+--- !u!65 &394800257236444838
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4193111741851632021}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.008573788, y: 0.03692522, z: 0.0021378172}
+  m_Center: {x: 0.001239163, y: 0, z: -0.03663123}
