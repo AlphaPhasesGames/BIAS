@@ -16,13 +16,22 @@ public class SaveSystem : MonoBehaviour
     [SerializeField] BrickHalfSave halfBrickPrefab; // access the BrickHalfSafe halfBrickPrefab
     [SerializeField] CementSave cementBrickPrefab;
     [SerializeField] WoodDoorSave woodDoorPrefab;
+    [SerializeField] WoodWindowSave woodWindowPrefab;
 
+    public bool loadedOnceBrick;
+    public bool loadedOnceBrickRotated;
+    public bool loadOnceHalfBrick;
+    public bool loadOnceCement;
+    public bool loadOnceDoor;
+    public bool loadWindowOnce;
+    public bool loadBDeetsOnce;
 
     public static List<BrickSave> bricks = new List<BrickSave>(); // create Bricksave list to store bricks
     public static List<BrickSaveRotated> bricksRotated = new List<BrickSaveRotated>(); // create BrickRotates list to store  Rotated bricks
     public static List<BrickHalfSave> bricksHalves = new List<BrickHalfSave>(); // create brick halves list to store half bricks
     public static List<CementSave> cementBrick = new List<CementSave>();
     public static List<WoodDoorSave> woodDoor = new List<WoodDoorSave>();
+    public static List<WoodWindowSave> woodWindow = new List<WoodWindowSave>();
 
 
     const string BRICK_SUB = "/brick"; // create a string to store the location of brick saves - this is in appdata/locallow/alphaphases
@@ -43,6 +52,10 @@ public class SaveSystem : MonoBehaviour
     const string WODD_DOOR_SUB = "/woodDoor"; // create a string to store the location of brick saves - this is in appdata/locallow/alphaphases
     const string WOOD_COUNT_SUB = "/woodDoor.count"; // create a string to store the count of bricks.count - this is in appdata/locallow/alphaphases
 
+    const string WODD_WINDOW_SUB = "/woodWindow"; // create a string to store the location of brick saves - this is in appdata/locallow/alphaphases
+    const string WOOD_WINDOW_COUNT_SUB = "/woodWindow.count"; // create a string to store the count of bricks.count - this is in appdata/locallow/alphaphases
+
+
     private void Awake() // on awake of script
     {
         instance = this;
@@ -51,6 +64,7 @@ public class SaveSystem : MonoBehaviour
         LoadHalfBrick(); // load half bricks save/
         LoadCement();
         LoadWoodDoor();
+        LoadWoodWindow();
         //LoadBuilderDetails();
         
     }
@@ -62,6 +76,7 @@ public class SaveSystem : MonoBehaviour
         SaveHalfBrick(); // call SaveHalfBrick function and save half bricks pos and rot/
         SaveCement();
         SaveWoodDoor();
+        SaveWoodWindow();
         //SaveBuildersDetails();
     }
     
@@ -88,42 +103,47 @@ public class SaveSystem : MonoBehaviour
 
     void LoadBrick() // load brick function
     {
-        BinaryFormatter formatter = new BinaryFormatter(); // create a new BinaryFormatter
-        string path = Application.persistentDataPath + BRICK_SUB + SceneManager.GetActiveScene().buildIndex; // load save path and use persistant data path plus the BRICK string plus the active scene. 
-        string countPath = Application.persistentDataPath + BRICK_COUNT_SUB + SceneManager.GetActiveScene().buildIndex; // load save count path and use persistant data path plus the BRICK_COUNT string plus the active scene. 
-        int brickCount = 0; // create brickCount int and initilize it as 0
+        if (!loadedOnceBrick)
+        {
+            BinaryFormatter formatter = new BinaryFormatter(); // create a new BinaryFormatter
+            string path = Application.persistentDataPath + BRICK_SUB + SceneManager.GetActiveScene().buildIndex; // load save path and use persistant data path plus the BRICK string plus the active scene. 
+            string countPath = Application.persistentDataPath + BRICK_COUNT_SUB + SceneManager.GetActiveScene().buildIndex; // load save count path and use persistant data path plus the BRICK_COUNT string plus the active scene. 
+            int brickCount = 0; // create brickCount int and initilize it as 0
 
-        if (File.Exists(countPath)) // if there is a save file
-        {
-            FileStream countStream = new FileStream(countPath, FileMode.Open); // open filestream
-            brickCount = (int)formatter.Deserialize(countStream); // deserialize file and assign to brickCount
-            countStream.Close(); // close stream
-        }
-
-        else // if there is no save file
-        {
-            Debug.LogError("Path not found in stream" + countPath); // display log in console
-        }
-        for (int i = 0; i < brickCount; i++) // for i less than brickCount, increment i
-        {
-            if (File.Exists(path + i)) //if a save file exists
+            if (File.Exists(countPath)) // if there is a save file
             {
-                FileStream stream = new FileStream(path + i, FileMode.Open); // open stream
-                BrickData data = formatter.Deserialize(stream) as BrickData; // deserialize save from brick data
-
-                stream.Close(); // close the stream
-                Vector3 position = new Vector3(data.position[0], data.position[1], data.position[2]); // set the bricks position to the values in the save file
-                Quaternion rotation = new Quaternion(data.rotation[0], data.rotation[1], data.rotation[2], data.rotation[3]); // set the bricks rotation to the values in the save file
-
-                BrickSave brick = Instantiate(brickPrefab, position, rotation); // instantiate brick from Bricksave Data in saved pos and rot
-                brick.brickName = data.brickType; // set brick name to data in save file
+                FileStream countStream = new FileStream(countPath, FileMode.Open); // open filestream
+                brickCount = (int)formatter.Deserialize(countStream); // deserialize file and assign to brickCount
+                countStream.Close(); // close stream
             }
 
-            else
+            else // if there is no save file
             {
-                Debug.LogError("Path not found in " + path + i); // display log in console
+                Debug.LogError("Path not found in stream" + countPath); // display log in console
+            }
+            for (int i = 0; i < brickCount; i++) // for i less than brickCount, increment i
+            {
+                if (File.Exists(path + i)) //if a save file exists
+                {
+                    FileStream stream = new FileStream(path + i, FileMode.Open); // open stream
+                    BrickData data = formatter.Deserialize(stream) as BrickData; // deserialize save from brick data
+
+                    stream.Close(); // close the stream
+                    Vector3 position = new Vector3(data.position[0], data.position[1], data.position[2]); // set the bricks position to the values in the save file
+                    Quaternion rotation = new Quaternion(data.rotation[0], data.rotation[1], data.rotation[2], data.rotation[3]); // set the bricks rotation to the values in the save file
+
+                    BrickSave brick = Instantiate(brickPrefab, position, rotation); // instantiate brick from Bricksave Data in saved pos and rot
+                    brick.brickName = data.brickType; // set brick name to data in save file
+                }
+
+                else
+                {
+                    Debug.LogError("Path not found in " + path + i); // display log in console
+                }
+                loadedOnceBrick = true;
             }
         }
+       
     }
 
     void SaveRotatedBrick() // save rotated brick function
@@ -148,43 +168,48 @@ public class SaveSystem : MonoBehaviour
 
     void LoadRotatedBrick()  // load rotated brick function
     {
-        BinaryFormatter formatter = new BinaryFormatter(); // create a new BinaryFormatter
-        string path = Application.persistentDataPath + BRICK_ROTATED_SUB + SceneManager.GetActiveScene().buildIndex; // load save path and use persistant data path plus the BRICK string plus the active scene. 
-        string countPath = Application.persistentDataPath + BRICK_ROTATED_COUNT_SUB + SceneManager.GetActiveScene().buildIndex; // load save count path and use persistant data path plus the BRICK_COUNT string plus the active scene. 
-        int brickRotatedCount = 0; // create brickRotatedCount int and initilize it as 0
-         
-        if (File.Exists(countPath)) //if a save file exists
+        if (!loadedOnceBrickRotated)
         {
-            FileStream countStream = new FileStream(countPath, FileMode.Open); // open stream
-            brickRotatedCount = (int)formatter.Deserialize(countStream); // deserialize save from brickRotated data
-            countStream.Close(); // close the stream
+            BinaryFormatter formatter = new BinaryFormatter(); // create a new BinaryFormatter
+            string path = Application.persistentDataPath + BRICK_ROTATED_SUB + SceneManager.GetActiveScene().buildIndex; // load save path and use persistant data path plus the BRICK string plus the active scene. 
+            string countPath = Application.persistentDataPath + BRICK_ROTATED_COUNT_SUB + SceneManager.GetActiveScene().buildIndex; // load save count path and use persistant data path plus the BRICK_COUNT string plus the active scene. 
+            int brickRotatedCount = 0; // create brickRotatedCount int and initilize it as 0
 
-        }
-
-        else // if there is no save file
-        {
-            Debug.LogError("Path not found in stream" + countPath); // display log in console
-        }
-        for (int i = 0; i < brickRotatedCount; i++) // for i less than brickCount, increment i
-        {
-            if (File.Exists(path + i)) //if a save file exists
+            if (File.Exists(countPath)) //if a save file exists
             {
-                FileStream stream = new FileStream(path + i, FileMode.Open);  // open stream
-                BrickData data = formatter.Deserialize(stream) as BrickData; // deserialize save from brick data
+                FileStream countStream = new FileStream(countPath, FileMode.Open); // open stream
+                brickRotatedCount = (int)formatter.Deserialize(countStream); // deserialize save from brickRotated data
+                countStream.Close(); // close the stream
 
-                stream.Close(); // close the stream
-                Vector3 positionRotated = new Vector3(data.position[0], data.position[1], data.position[2]); // set the bricks position to the values in the save file
-                Quaternion rotationRotated = new Quaternion(data.rotation[0], data.rotation[1], data.rotation[2], data.rotation[3]);  // set the bricks rotation to the values in the save file
-
-                BrickSaveRotated brick = Instantiate(brickPrefabRotated, positionRotated, rotationRotated);  // instantiate brick from Bricksave Data in saved pos and rot
-                brick.brickName = data.brickType; // set brick name to data in save file
             }
 
-            else
+            else // if there is no save file
             {
-                Debug.LogError("Path not found in " + path + i); // display log in console
+                Debug.LogError("Path not found in stream" + countPath); // display log in console
             }
+            for (int i = 0; i < brickRotatedCount; i++) // for i less than brickCount, increment i
+            {
+                if (File.Exists(path + i)) //if a save file exists
+                {
+                    FileStream stream = new FileStream(path + i, FileMode.Open);  // open stream
+                    BrickData data = formatter.Deserialize(stream) as BrickData; // deserialize save from brick data
+
+                    stream.Close(); // close the stream
+                    Vector3 positionRotated = new Vector3(data.position[0], data.position[1], data.position[2]); // set the bricks position to the values in the save file
+                    Quaternion rotationRotated = new Quaternion(data.rotation[0], data.rotation[1], data.rotation[2], data.rotation[3]);  // set the bricks rotation to the values in the save file
+
+                    BrickSaveRotated brick = Instantiate(brickPrefabRotated, positionRotated, rotationRotated);  // instantiate brick from Bricksave Data in saved pos and rot
+                    brick.brickName = data.brickType; // set brick name to data in save file
+                }
+
+                else
+                {
+                    Debug.LogError("Path not found in " + path + i); // display log in console
+                }
+            }
+            loadedOnceBrickRotated = true;
         }
+   
     }
 
     void SaveHalfBrick()  // save half rotated brick function
@@ -209,43 +234,48 @@ public class SaveSystem : MonoBehaviour
 
     void LoadHalfBrick() //load half brick function
     {
-        BinaryFormatter formatter = new BinaryFormatter(); // create a new BinaryFormatter
-        string path = Application.persistentDataPath + BRICK_HALF_SUB + SceneManager.GetActiveScene().buildIndex; // load save path and use persistant data path plus the BRICK string plus the active scene. 
-        string countPath = Application.persistentDataPath + BRICK_HALF_COUNT_SUB + SceneManager.GetActiveScene().buildIndex; // load save count path and use persistant data path plus the BRICK_COUNT string plus the active scene. 
-        int brickHalfCount = 0;  // create brickRotatedCount int and initilize it as 0
-
-        if (File.Exists(countPath))  //if a save file exists
+        if (!loadOnceHalfBrick)
         {
-            FileStream countStream = new FileStream(countPath, FileMode.Open); // open stream
-            brickHalfCount = (int)formatter.Deserialize(countStream); // deserialize save from brick data
-            countStream.Close(); // close the stream
+            BinaryFormatter formatter = new BinaryFormatter(); // create a new BinaryFormatter
+            string path = Application.persistentDataPath + BRICK_HALF_SUB + SceneManager.GetActiveScene().buildIndex; // load save path and use persistant data path plus the BRICK string plus the active scene. 
+            string countPath = Application.persistentDataPath + BRICK_HALF_COUNT_SUB + SceneManager.GetActiveScene().buildIndex; // load save count path and use persistant data path plus the BRICK_COUNT string plus the active scene. 
+            int brickHalfCount = 0;  // create brickRotatedCount int and initilize it as 0
 
-        }
-
-        else
-        {
-            Debug.LogError("Path not found in stream" + countPath); // display log in console
-        }
-        for (int i = 0; i < brickHalfCount; i++) // for i less than brickHalfCount, increment i
-        {
-            if (File.Exists(path + i)) //if a save file exists
+            if (File.Exists(countPath))  //if a save file exists
             {
-                FileStream stream = new FileStream(path + i, FileMode.Open);  // open stream
-                BrickData data = formatter.Deserialize(stream) as BrickData; // deserialize save from brick data
+                FileStream countStream = new FileStream(countPath, FileMode.Open); // open stream
+                brickHalfCount = (int)formatter.Deserialize(countStream); // deserialize save from brick data
+                countStream.Close(); // close the stream
 
-                stream.Close(); // close the stream
-                Vector3 positionHalf = new Vector3(data.position[0], data.position[1], data.position[2]); // set the bricks position to the values in the save file
-                Quaternion rotationHalf = new Quaternion(data.rotation[0], data.rotation[1], data.rotation[2], data.rotation[3]); // set the bricks rotation to the values in the save file
-
-                BrickHalfSave brickHalf = Instantiate(halfBrickPrefab, positionHalf, rotationHalf); // instantiate brick from Bricksave Data in saved pos and rot
-                brickHalf.brickName = data.brickType; // set brick name to data in save file
             }
 
             else
             {
-                Debug.LogError("Path not found in " + path + i); // display log in console
+                Debug.LogError("Path not found in stream" + countPath); // display log in console
             }
+            for (int i = 0; i < brickHalfCount; i++) // for i less than brickHalfCount, increment i
+            {
+                if (File.Exists(path + i)) //if a save file exists
+                {
+                    FileStream stream = new FileStream(path + i, FileMode.Open);  // open stream
+                    BrickData data = formatter.Deserialize(stream) as BrickData; // deserialize save from brick data
+
+                    stream.Close(); // close the stream
+                    Vector3 positionHalf = new Vector3(data.position[0], data.position[1], data.position[2]); // set the bricks position to the values in the save file
+                    Quaternion rotationHalf = new Quaternion(data.rotation[0], data.rotation[1], data.rotation[2], data.rotation[3]); // set the bricks rotation to the values in the save file
+
+                    BrickHalfSave brickHalf = Instantiate(halfBrickPrefab, positionHalf, rotationHalf); // instantiate brick from Bricksave Data in saved pos and rot
+                    brickHalf.brickName = data.brickType; // set brick name to data in save file
+                }
+
+                else
+                {
+                    Debug.LogError("Path not found in " + path + i); // display log in console
+                }
+            }
+            loadOnceHalfBrick = true;
         }
+       
     }
 
     void SaveCement() // save brick function
@@ -272,45 +302,50 @@ public class SaveSystem : MonoBehaviour
 
     void LoadCement() // load brick function
     {
-        Debug.Log("Loaded 10%");
-        BinaryFormatter formatter = new BinaryFormatter(); // create a new BinaryFormatter
-        string path = Application.persistentDataPath + CEMENT_SUB + SceneManager.GetActiveScene().buildIndex; // load save path and use persistant data path plus the BRICK string plus the active scene. 
-        string countPath = Application.persistentDataPath + CEMENT_COUNT_SUB + SceneManager.GetActiveScene().buildIndex; // load save count path and use persistant data path plus the BRICK_COUNT string plus the active scene. 
-        int cementCount = 0; // create brickCount int and initilize it as 0
+        if (!loadOnceCement)
+        {
+            Debug.Log("Loaded 10%");
+            BinaryFormatter formatter = new BinaryFormatter(); // create a new BinaryFormatter
+            string path = Application.persistentDataPath + CEMENT_SUB + SceneManager.GetActiveScene().buildIndex; // load save path and use persistant data path plus the BRICK string plus the active scene. 
+            string countPath = Application.persistentDataPath + CEMENT_COUNT_SUB + SceneManager.GetActiveScene().buildIndex; // load save count path and use persistant data path plus the BRICK_COUNT string plus the active scene. 
+            int cementCount = 0; // create brickCount int and initilize it as 0
 
-        if (File.Exists(countPath)) // if there is a save file
-        {
-            FileStream countStream = new FileStream(countPath, FileMode.Open); // open filestream
-            cementCount = (int)formatter.Deserialize(countStream); // deserialize file and assign to brickCount
-            countStream.Close(); // close stream
-            Debug.Log("Loaded 20 File Exists%");
-        }
-
-        else // if there is no save file
-        {
-            Debug.LogError("Path not found in stream" + countPath); // display log in console
-        }
-        for (int i = 0; i < cementCount; i++) // for i less than brickCount, increment i
-        {
-            if (File.Exists(path + i)) //if a save file exists
+            if (File.Exists(countPath)) // if there is a save file
             {
-                FileStream stream = new FileStream(path + i, FileMode.Open); // open stream
-                BrickData data = formatter.Deserialize(stream) as BrickData; // deserialize save from brick data
-
-                stream.Close(); // close the stream
-                Vector3 position = new Vector3(data.position[0], data.position[1], data.position[2]); // set the bricks position to the values in the save file
-                Quaternion rotation = new Quaternion(data.rotation[0], data.rotation[1], data.rotation[2], data.rotation[3]); // set the bricks rotation to the values in the save file
-
-                CementSave cement = Instantiate(cementBrickPrefab, position, rotation); // instantiate brick from Bricksave Data in saved pos and rot
-                cement.brickName = data.brickType4; // set brick name to data in save file
+                FileStream countStream = new FileStream(countPath, FileMode.Open); // open filestream
+                cementCount = (int)formatter.Deserialize(countStream); // deserialize file and assign to brickCount
+                countStream.Close(); // close stream
                 Debug.Log("Loaded 20 File Exists%");
             }
 
-            else
+            else // if there is no save file
             {
-                Debug.LogError("Path not found in " + path + i); // display log in console
+                Debug.LogError("Path not found in stream" + countPath); // display log in console
             }
+            for (int i = 0; i < cementCount; i++) // for i less than brickCount, increment i
+            {
+                if (File.Exists(path + i)) //if a save file exists
+                {
+                    FileStream stream = new FileStream(path + i, FileMode.Open); // open stream
+                    BrickData data = formatter.Deserialize(stream) as BrickData; // deserialize save from brick data
+
+                    stream.Close(); // close the stream
+                    Vector3 position = new Vector3(data.position[0], data.position[1], data.position[2]); // set the bricks position to the values in the save file
+                    Quaternion rotation = new Quaternion(data.rotation[0], data.rotation[1], data.rotation[2], data.rotation[3]); // set the bricks rotation to the values in the save file
+
+                    CementSave cement = Instantiate(cementBrickPrefab, position, rotation); // instantiate brick from Bricksave Data in saved pos and rot
+                    cement.brickName = data.brickType4; // set brick name to data in save file
+                    Debug.Log("Loaded 20 File Exists%");
+                }
+
+                else
+                {
+                    Debug.LogError("Path not found in " + path + i); // display log in console
+                }
+            }
+            loadOnceCement = true;
         }
+       
     }
 
     void SaveWoodDoor() // save brick function
@@ -335,42 +370,110 @@ public class SaveSystem : MonoBehaviour
 
     void LoadWoodDoor() // load brick function
     {
+        if (!loadOnceDoor)
+        {
+            BinaryFormatter formatter = new BinaryFormatter(); // create a new BinaryFormatter
+            string path = Application.persistentDataPath + WODD_DOOR_SUB + SceneManager.GetActiveScene().buildIndex; // load save path and use persistant data path plus the BRICK string plus the active scene. 
+            string countPath = Application.persistentDataPath + WOOD_COUNT_SUB + SceneManager.GetActiveScene().buildIndex; // load save count path and use persistant data path plus the BRICK_COUNT string plus the active scene. 
+            int woodDoorCount = 0; // create brickCount int and initilize it as 0
+
+            if (File.Exists(countPath)) // if there is a save file
+            {
+                FileStream countStream = new FileStream(countPath, FileMode.Open); // open filestream
+                woodDoorCount = (int)formatter.Deserialize(countStream); // deserialize file and assign to brickCount
+                countStream.Close(); // close stream
+            }
+
+            else // if there is no save file
+            {
+                Debug.LogError("Path not found in stream" + countPath); // display log in console
+            }
+            for (int i = 0; i < woodDoorCount; i++) // for i less than brickCount, increment i
+            {
+                if (File.Exists(path + i)) //if a save file exists
+                {
+                    FileStream stream = new FileStream(path + i, FileMode.Open); // open stream
+                    BrickData data = formatter.Deserialize(stream) as BrickData; // deserialize save from brick data
+
+                    stream.Close(); // close the stream
+                    Vector3 position = new Vector3(data.position[0], data.position[1], data.position[2]); // set the bricks position to the values in the save file
+                    Quaternion rotation = new Quaternion(data.rotation[0], data.rotation[1], data.rotation[2], data.rotation[3]); // set the bricks rotation to the values in the save file
+
+                    WoodDoorSave woodDoor = Instantiate(woodDoorPrefab, position, rotation); // instantiate brick from Bricksave Data in saved pos and rot
+                    woodDoor.doorName = data.brickType5; // set brick name to data in save file
+                }
+
+                else
+                {
+                    Debug.LogError("Path not found in " + path + i); // display log in console
+                }
+            }
+        }
+      
+    }
+
+    void SaveWoodWindow() // save brick function
+    {
         BinaryFormatter formatter = new BinaryFormatter(); // create a new BinaryFormatter
-        string path = Application.persistentDataPath + WODD_DOOR_SUB + SceneManager.GetActiveScene().buildIndex; // load save path and use persistant data path plus the BRICK string plus the active scene. 
-        string countPath = Application.persistentDataPath + WOOD_COUNT_SUB + SceneManager.GetActiveScene().buildIndex; // load save count path and use persistant data path plus the BRICK_COUNT string plus the active scene. 
-        int woodDoorCount = 0; // create brickCount int and initilize it as 0
+        string path = Application.persistentDataPath + WODD_WINDOW_SUB + SceneManager.GetActiveScene().buildIndex; // create save path and use persistant data path plus the BRICK string plus the active scene. 
+        string countPath = Application.persistentDataPath + WOOD_WINDOW_COUNT_SUB + SceneManager.GetActiveScene().buildIndex; // create save count path and use persistant data path plus the BRICK_COUNT string plus the active scene. 
 
-        if (File.Exists(countPath)) // if there is a save file
-        {
-            FileStream countStream = new FileStream(countPath, FileMode.Open); // open filestream
-            woodDoorCount = (int)formatter.Deserialize(countStream); // deserialize file and assign to brickCount
-            countStream.Close(); // close stream
-        }
+        FileStream countStream = new FileStream(countPath, FileMode.Create); // create a new filestream
 
-        else // if there is no save file
+        formatter.Serialize(countStream, woodWindow.Count); // format saves using binary
+        countStream.Close(); // close the count stream
+
+        for (int i = 0; i < woodWindow.Count; i++) // for i is less that brickscount, increment i
         {
-            Debug.LogError("Path not found in stream" + countPath); // display log in console
+            FileStream stream = new FileStream(path + i, FileMode.Create); // create new filestream
+            BrickData data = new BrickData(woodWindow[i]); // create new brickdata save file
+            formatter.Serialize(stream, data); // serialize file
+            stream.Close(); // close stream
         }
-        for (int i = 0; i < woodDoorCount; i++) // for i less than brickCount, increment i
+    }
+
+    void LoadWoodWindow() // load brick function
+    {
+        if (!loadWindowOnce)
         {
-            if (File.Exists(path + i)) //if a save file exists
+            BinaryFormatter formatter = new BinaryFormatter(); // create a new BinaryFormatter
+            string path = Application.persistentDataPath + WODD_WINDOW_SUB + SceneManager.GetActiveScene().buildIndex; // load save path and use persistant data path plus the BRICK string plus the active scene. 
+            string countPath = Application.persistentDataPath + WOOD_WINDOW_COUNT_SUB + SceneManager.GetActiveScene().buildIndex; // load save count path and use persistant data path plus the BRICK_COUNT string plus the active scene. 
+            int woodWindowCount = 0; // create brickCount int and initilize it as 0
+
+            if (File.Exists(countPath)) // if there is a save file
             {
-                FileStream stream = new FileStream(path + i, FileMode.Open); // open stream
-                BrickData data = formatter.Deserialize(stream) as BrickData; // deserialize save from brick data
-
-                stream.Close(); // close the stream
-                Vector3 position = new Vector3(data.position[0], data.position[1], data.position[2]); // set the bricks position to the values in the save file
-                Quaternion rotation = new Quaternion(data.rotation[0], data.rotation[1], data.rotation[2], data.rotation[3]); // set the bricks rotation to the values in the save file
-
-                WoodDoorSave woodDoor = Instantiate(woodDoorPrefab, position, rotation); // instantiate brick from Bricksave Data in saved pos and rot
-                woodDoor.doorName = data.brickType5; // set brick name to data in save file
+                FileStream countStream = new FileStream(countPath, FileMode.Open); // open filestream
+                woodWindowCount = (int)formatter.Deserialize(countStream); // deserialize file and assign to brickCount
+                countStream.Close(); // close stream
             }
 
-            else
+            else // if there is no save file
             {
-                Debug.LogError("Path not found in " + path + i); // display log in console
+                Debug.LogError("Path not found in stream" + countPath); // display log in console
+            }
+            for (int i = 0; i < woodWindowCount; i++) // for i less than brickCount, increment i
+            {
+                if (File.Exists(path + i)) //if a save file exists
+                {
+                    FileStream stream = new FileStream(path + i, FileMode.Open); // open stream
+                    BrickData data = formatter.Deserialize(stream) as BrickData; // deserialize save from brick data
+
+                    stream.Close(); // close the stream
+                    Vector3 position = new Vector3(data.position[0], data.position[1], data.position[2]); // set the bricks position to the values in the save file
+                    Quaternion rotation = new Quaternion(data.rotation[0], data.rotation[1], data.rotation[2], data.rotation[3]); // set the bricks rotation to the values in the save file
+
+                    WoodWindowSave woodWindow = Instantiate(woodWindowPrefab, position, rotation); // instantiate brick from Bricksave Data in saved pos and rot
+                    woodWindow.windowName = data.brickType6; // set brick name to data in save file
+                }
+
+                else
+                {
+                    Debug.LogError("Path not found in " + path + i); // display log in console
+                }
             }
         }
+       
     }
 
     public static void SaveBuildersDetails(BuildersDetails buildersDetails) // static files can be accessed without an instance
@@ -387,6 +490,7 @@ public class SaveSystem : MonoBehaviour
 
     public static BuildersDetailsData LoadBuilderDetails()
     {
+       
         string path = Application.persistentDataPath + DETAILS_SUB + SceneManager.GetActiveScene().buildIndex; // create save path and use persistant data path plus the BRICK string plus the active scene. 
         if (File.Exists(path))
         {
@@ -400,7 +504,7 @@ public class SaveSystem : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Save file not found in " + path);
+          //  Debug.LogError("Save file not found in " + path);
             return null;
         }
     }

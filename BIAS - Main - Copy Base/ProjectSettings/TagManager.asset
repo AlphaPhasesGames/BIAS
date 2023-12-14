@@ -12,6 +12,7 @@ TagManager:
   - Cement
   - manager
   - WoodDoor
+  - Window
   layers:
   - Default
   - TransparentFX

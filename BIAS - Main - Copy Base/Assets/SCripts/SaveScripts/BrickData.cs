@@ -6,9 +6,10 @@ public class BrickData
 {
     public string brickType; // string to store brick type - for default brick
     public string brickType2; // string to store brick type 2 - for rotated brick
-    public string brickType3; // string to store brick type 2 - for rotated brick
-    public string brickType4;
-    public string brickType5;
+    public string brickType3; // string to store square brick 
+    public string brickType4; // String to store cement 
+    public string brickType5; // string to store wooden door
+    public string brickType6; // string to store winodw
 
     public float[] position; //  float array to store the position of the brick in the game world
     public float[] rotation; // float array to store the rotation of the brick in the game world
@@ -124,6 +125,30 @@ public class BrickData
         rotation = new float[] // rotation = a new float array
         {
             doorRotation.x,doorRotation.y,doorRotation.z, doorRotation.w // store brick rotation X Y and Z and W ( which is Width
+        }; // ; goes here for some reason - Unknown
+    }
+
+    public BrickData(WoodWindowSave woodWindowSave)  // class BrickData for default brick - inherits Bricksave script as bricksave variable
+    {
+
+        brickType6 = woodWindowSave.windowName; // brickType is loaded from brickSave.brickname
+
+        Quaternion windowRotation = woodWindowSave.transform.rotation; // rotation is the rotation of any default brick object with the Bricksave script attached
+        Vector3 windowPosition = woodWindowSave.transform.position; // position is the position of any default brick object with the Bricksave script attached
+
+        // We could do it the method directly below but we can make it look nicer - unlike the rest of this spagetti code
+        // position[0] = brickPos.x;
+        // position[1] = brickPos.y;
+        // position[2] = brickPos.z;
+
+        position = new float[] // position = a new float array
+        {
+           windowPosition.x,windowPosition.y,windowPosition.z // store brick positions from X Y and Z coordinats 
+       }; //  ; goes here for some reason - Unknown
+
+        rotation = new float[] // rotation = a new float array
+        {
+            windowRotation.x,windowRotation.y,windowRotation.z, windowRotation.w // store brick rotation X Y and Z and W ( which is Width
         }; // ; goes here for some reason - Unknown
     }
 }
