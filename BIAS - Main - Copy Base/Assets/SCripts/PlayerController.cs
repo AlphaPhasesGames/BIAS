@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour
     public float MovementSpeed = 1;
     public float Gravity = 9.8f;
     public float speed = 10f;
-
+    public float rotateSpeed;
     public float bricksThePlayerHasToBuildWith;
     //private float velocity = 0;
 
@@ -685,7 +685,8 @@ public class PlayerController : MonoBehaviour
                             {
                                 Debug.Log(hit.point); // log the position it hits
                                 Debug.Log(hit.transform.tag); // log the tag it hits
-                                Instantiate(woodenWindowToBuild, hit.point, Quaternion.identity); // create brick at hitpoint(Ground) in its original rotation;
+                                Instantiate(woodenWindowToBuild, hit.point, transWoodWindow.transform.rotation); // create brick at hitpoint(Ground) in its original rotation;
+                                woodenWindowToBuild.transform.rotation = Quaternion.Euler(transWoodWindow.transform.rotation.x, transWoodWindow.transform.rotation.y, transWoodWindow.transform.rotation.z);
                                 bricks.Add(woodenWindowToBuild); //  add brick to list of bricks
                                 builder.Remove1ToBrickAmount();
 
